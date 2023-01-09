@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class QrScanner extends StatefulWidget {
   const QrScanner({super.key});
@@ -17,7 +15,7 @@ class _QrScannerState extends State<QrScanner> {
         title: const Text('QR Scanner'),
       ),
       body: Center(
-        child: ElevatedButton(onPressed: () {}, child: Text('Scan QR')),
+        child: ElevatedButton(onPressed: () {}, child: const Text('Scan QR')),
       ),
     );
   }

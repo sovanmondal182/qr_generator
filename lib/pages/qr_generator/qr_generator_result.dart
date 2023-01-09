@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_scanner/providers/qr_generator_provider.dart';
 
 class QrGeneratorResult extends StatefulWidget {
-  QrGeneratorResult({
+  const QrGeneratorResult({
     super.key,
   });
 
@@ -19,9 +17,12 @@ class _QrGeneratorResultState extends State<QrGeneratorResult> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.teal,
+      appBar: AppBar(
+        elevation: 0,
+      ),
       body: Consumer<QrGeneratorProvider>(
         builder: (context, qrGeneratorResult, child) => SafeArea(
-          minimum: EdgeInsets.all(10),
+          minimum: const EdgeInsets.all(10),
           child: Center(
               child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
@@ -31,10 +32,9 @@ class _QrGeneratorResultState extends State<QrGeneratorResult> {
               padding: const EdgeInsets.all(10.0),
               backgroundColor: qrGeneratorResult.backgroundColor,
               version: 5,
-              // version: QrVersions.auto,
               semanticsLabel: 'QR Code',
               embeddedImage: qrGeneratorResult.embeddedImage,
-              data: qrGeneratorResult.data,
+              data: qrGeneratorResult.data!,
               embeddedImageStyle: QrEmbeddedImageStyle(
                 size: Size(qrGeneratorResult.size, qrGeneratorResult.size),
                 color: Colors.transparent,

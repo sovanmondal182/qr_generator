@@ -18,16 +18,20 @@ class HomePage extends StatelessWidget {
             children: [
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push((context),
-                        MaterialPageRoute(builder: (context) => QrGenerator()));
+                    Navigator.push(
+                        (context),
+                        MaterialPageRoute(
+                            builder: (context) => const QrGenerator()));
                   },
-                  child: Text('Generate QR')),
+                  child: const Text('Generate QR')),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push((context),
-                        MaterialPageRoute(builder: (context) => QrScanner()));
+                    Navigator.push(
+                        (context),
+                        MaterialPageRoute(
+                            builder: (context) => const QrScanner()));
                   },
-                  child: Text('Scan QR')),
+                  child: const Text('Scan QR')),
             ],
           ),
         ),
