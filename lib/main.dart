@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
             create: (context) => QrGeneratorProvider()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
