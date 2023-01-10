@@ -96,12 +96,12 @@ class _QrGeneratorState extends State<QrGenerator> {
                                 (context),
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const QrGeneratorResult()))
+                                        const QrGeneratorResultWithImage()))
                             : Navigator.push(
                                 (context),
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const QrGeneratorResultWithImage()));
+                                        const QrGeneratorResult()));
                       },
                       child: const Text('Generate QR')),
                 ],

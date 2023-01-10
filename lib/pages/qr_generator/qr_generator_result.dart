@@ -16,38 +16,110 @@ class _QrGeneratorResultState extends State<QrGeneratorResult> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal,
       appBar: AppBar(
         elevation: 0,
       ),
       body: Consumer<QrGeneratorProvider>(
-        builder: (context, qrGeneratorResult, child) => SafeArea(
+        builder: (context, qrGeneratorProvider, child) => SafeArea(
           minimum: const EdgeInsets.all(10),
           child: Center(
-              child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: QrImage(
-              size: 300,
-              gapless: qrGeneratorResult.gapless,
-              padding: const EdgeInsets.all(10.0),
-              backgroundColor: qrGeneratorResult.backgroundColor,
-              version: 5,
-              semanticsLabel: 'QR Code',
-              embeddedImage: qrGeneratorResult.embeddedImage,
-              data: qrGeneratorResult.data!,
-              embeddedImageStyle: QrEmbeddedImageStyle(
-                size: Size(qrGeneratorResult.size, qrGeneratorResult.size),
-                color: Colors.transparent,
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: const Offset(1, 2), // changes position of shadow
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: QrImage(
+                    size: 300,
+                    gapless: qrGeneratorProvider.gapless,
+                    padding: const EdgeInsets.all(10.0),
+                    backgroundColor: qrGeneratorProvider.backgroundColor,
+                    version: 5,
+                    semanticsLabel: 'QR Code',
+                    data: qrGeneratorProvider.data!,
+                    dataModuleStyle: QrDataModuleStyle(
+                      dataModuleShape: qrGeneratorProvider.dataModuleShape,
+                      color: qrGeneratorProvider.dataModuleColor,
+                    ),
+                    eyeStyle: QrEyeStyle(
+                      eyeShape: qrGeneratorProvider.eyeShape,
+                      color: qrGeneratorProvider.eyeColor,
+                    ),
+                  ),
+                ),
               ),
-              dataModuleStyle: QrDataModuleStyle(
-                dataModuleShape: qrGeneratorResult.dataModuleShape,
-                color: qrGeneratorResult.dataModuleColor,
+              SizedBox(
+                height: 50,
               ),
-              eyeStyle: QrEyeStyle(
-                eyeShape: qrGeneratorResult.eyeShape,
-                color: qrGeneratorResult.eyeColor,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      qrGeneratorProvider.saveImage();
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: const Offset(
+                                1, 2), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      child: Center(child: Text('Save')),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      qrGeneratorProvider.shareImage();
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: const Offset(
+                                1, 2), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      child: Center(child: Text('Share')),
+                    ),
+                  ),
+                ],
               ),
-            ),
+            ],
           )),
         ),
       ),

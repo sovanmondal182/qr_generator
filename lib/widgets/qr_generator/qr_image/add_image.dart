@@ -63,6 +63,7 @@ class _AddImageState extends State<AddImage> {
                 onChanged: (value) {
                   setState(() {});
                   addImage = value;
+                  qrGeneratorProvider.setImagePath('');
                 }),
           ],
         ),

@@ -21,30 +21,59 @@ class _QrGeneratorResultWithImageState
       appBar: AppBar(
         elevation: 0,
       ),
-      backgroundColor: Colors.teal,
       body: Consumer<QrGeneratorProvider>(
-        builder: (context, qrGeneratorResultWithImage, child) => SafeArea(
+        builder: (context, qrGeneratorProvider, child) => SafeArea(
           minimum: const EdgeInsets.all(10),
           child: Center(
-              child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: QrImage(
-              size: 300,
-              gapless: qrGeneratorResultWithImage.gapless,
-              padding: const EdgeInsets.all(10.0),
-              backgroundColor: qrGeneratorResultWithImage.backgroundColor,
-              version: 5,
-              semanticsLabel: 'QR Code',
-              data: qrGeneratorResultWithImage.data!,
-              dataModuleStyle: QrDataModuleStyle(
-                dataModuleShape: qrGeneratorResultWithImage.dataModuleShape,
-                color: qrGeneratorResultWithImage.dataModuleColor,
+              child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ]),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: QrImage(
+                    size: 300,
+                    gapless: qrGeneratorProvider.gapless,
+                    padding: const EdgeInsets.all(10.0),
+                    backgroundColor: qrGeneratorProvider.backgroundColor,
+                    version: 5,
+                    semanticsLabel: 'QR Code',
+                    embeddedImage: qrGeneratorProvider.embeddedImage,
+                    data: qrGeneratorProvider.data!,
+                    embeddedImageStyle: QrEmbeddedImageStyle(
+                      size: Size(
+                          qrGeneratorProvider.size, qrGeneratorProvider.size),
+                      color: Colors.transparent,
+                    ),
+                    dataModuleStyle: QrDataModuleStyle(
+                      dataModuleShape: qrGeneratorProvider.dataModuleShape,
+                      color: qrGeneratorProvider.dataModuleColor,
+                    ),
+                    eyeStyle: QrEyeStyle(
+                      eyeShape: qrGeneratorProvider.eyeShape,
+                      color: qrGeneratorProvider.eyeColor,
+                    ),
+                  ),
+                ),
               ),
-              eyeStyle: QrEyeStyle(
-                eyeShape: qrGeneratorResultWithImage.eyeShape,
-                color: qrGeneratorResultWithImage.eyeColor,
+              Row(
+                children: [
+                  Container(
+                    child: Text('Save'),
+                  ),
+                  Container(
+                    child: Text('Share'),
+                  ),
+                ],
               ),
-            ),
+            ],
           )),
         ),
       ),
