@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +5,6 @@ import 'package:qr_scanner/pages/qr_generator/qr_generator_result.dart';
 import 'package:qr_scanner/pages/qr_generator/qr_generator_result_with_image.dart';
 import 'package:qr_scanner/providers/qr_generator_provider.dart';
 import 'package:qr_scanner/widgets/qr_generator/qr_image/add_image.dart';
-import 'package:qr_scanner/widgets/qr_generator/gap_less.dart';
 import 'package:qr_scanner/widgets/qr_generator/qr_box/qr_box_color.dart';
 import 'package:qr_scanner/widgets/qr_generator/qr_box/qr_box_shape.dart';
 import 'package:qr_scanner/widgets/qr_generator/qr_data/qr_dot_color.dart';
@@ -27,20 +24,6 @@ class _QrGeneratorState extends State<QrGenerator> {
   Color datamoduleColor = Colors.black;
   Color eyeColor = Colors.black;
   late PermissionStatus _permissionStatus;
-  // QrDataModuleShape dataModuleShape = QrDataModuleShape.square;
-  // QrEyeShape eyemodelshape = QrEyeShape.square;
-  Directory? tempDir;
-  // <ImageProvider> embeddedImage =
-  //     <ImageProvider>(AssetImage(imagePath));
-  // File file = File(File.imagePath);
-  // ImageProvider? embeddedImage = AssetImage(imagePath);
-// FileImage? fileImage=FileImage(File(file.imagePath));
-
-  // void _requestTempDirectory() {
-  //   setState(() {
-  //     tempDir = getTemporaryDirectory() as Directory?;
-  //   });
-  // }
 
   @override
   void initState() {
@@ -55,15 +38,18 @@ class _QrGeneratorState extends State<QrGenerator> {
         });
       }
     }();
-    // _requestTempDirectory();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.teal,
       appBar: AppBar(
-        title: const Text('QR Generator'),
+        centerTitle: true,
+        title:
+            const Text('QR Generator', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
         minimum: const EdgeInsets.all(20),
@@ -74,36 +60,89 @@ class _QrGeneratorState extends State<QrGenerator> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextField(
-                    controller: _textEditingController,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your data',
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextField(
+                      controller: _textEditingController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your data',
+                      ),
                     ),
                   ),
-                  const GapLess(),
-                  const QrBackgroundColor(title: 'Background Color:'),
-                  const QrBoxColor(title: 'Dot color:'),
-                  const QrDotColor(title: 'Box Color:'),
-                  const QrDotShape(),
-                  const QrBoxShape(),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  const Text('Colors'),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      QrBackgroundColor(title: 'Background:'),
+                      QrBoxColor(title: 'Dot:'),
+                      QrDotColor(title: 'Box:'),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  const Text('Shapes'),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      QrDotShape(),
+                      QrBoxShape(),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
                   AddImage(),
-                  ElevatedButton(
-                      onPressed: () {
-                        qrGeneratorProvider
-                            .setData(_textEditingController.text);
-                        qrGeneratorProvider.imagePath != ''
-                            ? Navigator.push(
-                                (context),
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const QrGeneratorResultWithImage()))
-                            : Navigator.push(
-                                (context),
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const QrGeneratorResult()));
-                      },
-                      child: const Text('Generate QR')),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      qrGeneratorProvider.setData(_textEditingController.text);
+                      qrGeneratorProvider.imagePath != ''
+                          ? Navigator.push(
+                              (context),
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const QrGeneratorResultWithImage()))
+                          : Navigator.push(
+                              (context),
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const QrGeneratorResult()));
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 150,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: const Offset(
+                                1, 2), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.blue,
+                        ),
+                      ),
+                      child: const Center(
+                        child: Text('Generate QR'),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

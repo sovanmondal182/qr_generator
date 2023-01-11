@@ -9,29 +9,82 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('QR Scanner'),
+        centerTitle: true,
+        title: const Text('QR Scanner', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        (context),
-                        MaterialPageRoute(
-                            builder: (context) => const QrGenerator()));
-                  },
-                  child: const Text('Generate QR')),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        (context),
-                        MaterialPageRoute(
-                            builder: (context) => const QrScanner()));
-                  },
-                  child: const Text('Scan QR')),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      (context),
+                      MaterialPageRoute(
+                          builder: (context) => const QrGenerator()));
+                },
+                child: Container(
+                  height: 50,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset:
+                            const Offset(1, 2), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text('Generate QR'),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      (context),
+                      MaterialPageRoute(
+                          builder: (context) => const QrScanner()));
+                },
+                child: Container(
+                  height: 50,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset:
+                            const Offset(1, 2), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text('Scan QR'),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

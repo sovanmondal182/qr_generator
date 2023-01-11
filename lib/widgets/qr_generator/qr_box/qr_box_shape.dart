@@ -26,6 +26,8 @@ class _QrBoxShapeState extends State<QrBoxShape> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButton<String>(
+            elevation: 1,
+            borderRadius: BorderRadius.circular(10),
             value: eyedropdownValue,
             onChanged: (value) {
               setState(() {});

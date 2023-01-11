@@ -56,6 +56,7 @@ class _AddImageState extends State<AddImage> {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('Add Image:'),
             Switch(
@@ -67,10 +68,13 @@ class _AddImageState extends State<AddImage> {
                 }),
           ],
         ),
+        const SizedBox(
+          height: 10,
+        ),
         addImage == true
             ? Column(
                 children: [
-                  Row(children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     const Text('Image:'),
                     const SizedBox(
                       width: 10,
@@ -80,20 +84,56 @@ class _AddImageState extends State<AddImage> {
                         showModalBottomSheet(
                             context: context,
                             builder: (context) => BottomSheet(
-                                  builder: (context) => Column(
+                                  builder: (context) => Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      ListTile(
-                                        leading: const Icon(Icons.camera),
-                                        title: const Text('Camera'),
+                                      const SizedBox(
+                                        width: 20,
+                                      ),
+                                      GestureDetector(
+                                        child: SizedBox(
+                                          height: 100,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(
+                                                Icons.camera,
+                                                size: 40,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text('Camera'),
+                                            ],
+                                          ),
+                                        ),
                                         onTap: () {
                                           Navigator.of(context).pop();
                                           _pickImage(ImageSource.camera);
                                         },
                                       ),
-                                      ListTile(
-                                        leading: const Icon(Icons.image),
-                                        title: const Text('Gallery'),
+                                      const SizedBox(
+                                        width: 30,
+                                      ),
+                                      GestureDetector(
+                                        child: SizedBox(
+                                          height: 100,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              Icon(
+                                                Icons.image,
+                                                size: 40,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text('Gallery'),
+                                            ],
+                                          ),
+                                        ),
                                         onTap: () {
                                           Navigator.of(context).pop();
                                           _pickImage(ImageSource.gallery);
@@ -146,6 +186,7 @@ class _AddImageState extends State<AddImage> {
                     ),
                   ]),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text('Image Size:'),
                       qrGeneratorProvider.imagePath != ''
@@ -158,7 +199,7 @@ class _AddImageState extends State<AddImage> {
                                 qrGeneratorProvider.setSize(size);
                               },
                               min: 1,
-                              max: 60,
+                              max: 50,
                             )
                           : Slider(
                               min: 1, max: 60, value: size, onChanged: null),

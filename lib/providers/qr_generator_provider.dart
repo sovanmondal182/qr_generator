@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +8,13 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class QrGeneratorProvider extends ChangeNotifier {
-  File? fileImage;
-  String path = '';
   String imagePath = '';
 
-  bool gapless;
+  bool gapless = true;
 
   Color backgroundColor;
 
-  String? data;
+  String data = '';
 
   ImageProvider? embeddedImage;
 
@@ -32,9 +29,8 @@ class QrGeneratorProvider extends ChangeNotifier {
   Color eyeColor;
 
   QrGeneratorProvider(
-      {this.gapless = false,
-      this.backgroundColor = Colors.white,
-      this.size = 60,
+      {this.backgroundColor = Colors.white,
+      this.size = 50,
       this.dataModuleShape = QrDataModuleShape.square,
       this.dataModuleColor = Colors.black,
       this.eyeShape = QrEyeShape.square,
@@ -43,11 +39,6 @@ class QrGeneratorProvider extends ChangeNotifier {
   setImagePath(String imagePath) {
     this.imagePath = imagePath;
     embeddedImage = FileImage(File(imagePath));
-    notifyListeners();
-  }
-
-  setGapless(bool gapless) {
-    this.gapless = gapless;
     notifyListeners();
   }
 
@@ -86,52 +77,37 @@ class QrGeneratorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  saveImage() async {
-    final qrValidationResult = QrValidator.validate(
-      data: data!,
-      version: QrVersions.auto,
-      errorCorrectionLevel: QrErrorCorrectLevel.L,
-    );
-    if (qrValidationResult.status == QrValidationStatus.valid) {
-      final qrCode = qrValidationResult.qrCode;
-    } else {
-      qrValidationResult.error;
-    }
-    final qrCode = qrValidationResult.qrCode;
-
-    final painter = QrPainter.withQr(
-      qr: qrCode!,
-      color: const Color(0xFF000000),
-      gapless: true,
-      embeddedImageStyle: null,
-      embeddedImage: null,
-    );
-    Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
-    final ts = DateTime.now().millisecondsSinceEpoch.toString();
-    String path = '$tempPath/$ts.png';
-    final picData =
-        await painter.toImageData(2048, format: ui.ImageByteFormat.png);
-    this.path = path;
-    await writeToFile(picData!, path);
+  saveImage(ByteData picData) async {
+    String path = await getPath();
+    await writeToFile(picData, path);
 
     await GallerySaver.saveImage(path);
 
     notifyListeners();
   }
 
-  shareImage() async {
-    // final path = imagePath;
-    await Share.shareXFiles([XFile(path)],
-        // mimeTypes: ["image/png"],
-        subject: 'My QR code',
-        text: 'Please scan me');
-    print('send');
+  shareImage(ByteData picData) async {
+    String path = await getPath();
+    await writeToFile(picData, path);
+
+    await Share.shareXFiles(
+      [XFile(path)],
+    );
+    notifyListeners();
   }
 
   Future<void> writeToFile(ByteData data, String path) async {
     final buffer = data.buffer;
     await File(path).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  }
+
+  Future<String> getPath() async {
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    final ts = DateTime.now().millisecondsSinceEpoch.toString();
+    String path = '$tempPath/$ts.png';
+
+    return path;
   }
 }

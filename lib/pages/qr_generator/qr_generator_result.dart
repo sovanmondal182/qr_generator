@@ -1,4 +1,9 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_scanner/providers/qr_generator_provider.dart';
@@ -13,11 +18,24 @@ class QrGeneratorResult extends StatefulWidget {
 }
 
 class _QrGeneratorResultState extends State<QrGeneratorResult> {
+  late FToast fToast;
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
+  final GlobalKey globalKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        title: const Text('QR', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Consumer<QrGeneratorProvider>(
         builder: (context, qrGeneratorProvider, child) => SafeArea(
@@ -40,34 +58,59 @@ class _QrGeneratorResultState extends State<QrGeneratorResult> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: QrImage(
-                    size: 300,
-                    gapless: qrGeneratorProvider.gapless,
-                    padding: const EdgeInsets.all(10.0),
-                    backgroundColor: qrGeneratorProvider.backgroundColor,
-                    version: 5,
-                    semanticsLabel: 'QR Code',
-                    data: qrGeneratorProvider.data!,
-                    dataModuleStyle: QrDataModuleStyle(
-                      dataModuleShape: qrGeneratorProvider.dataModuleShape,
-                      color: qrGeneratorProvider.dataModuleColor,
-                    ),
-                    eyeStyle: QrEyeStyle(
-                      eyeShape: qrGeneratorProvider.eyeShape,
-                      color: qrGeneratorProvider.eyeColor,
+                  child: RepaintBoundary(
+                    key: globalKey,
+                    child: QrImage(
+                      size: 300,
+                      gapless: qrGeneratorProvider.gapless,
+                      padding: const EdgeInsets.all(10.0),
+                      backgroundColor: qrGeneratorProvider.backgroundColor,
+                      version: 5,
+                      semanticsLabel: 'QR Code',
+                      data: qrGeneratorProvider.data,
+                      dataModuleStyle: QrDataModuleStyle(
+                        dataModuleShape: qrGeneratorProvider.dataModuleShape,
+                        color: qrGeneratorProvider.dataModuleColor,
+                      ),
+                      eyeStyle: QrEyeStyle(
+                        eyeShape: qrGeneratorProvider.eyeShape,
+                        color: qrGeneratorProvider.eyeColor,
+                      ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      qrGeneratorProvider.saveImage();
+                    onTap: () async {
+                      var picData = await _getQrCodeBytes();
+                      qrGeneratorProvider.saveImage(picData);
+                      FToast().showToast(
+                        toastDuration: const Duration(seconds: 2),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 12.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25.0),
+                            color: Colors.greenAccent,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(Icons.check),
+                              SizedBox(
+                                width: 12.0,
+                              ),
+                              Text('Image Saved'),
+                            ],
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       height: 50,
@@ -88,12 +131,13 @@ class _QrGeneratorResultState extends State<QrGeneratorResult> {
                           color: Colors.blue,
                         ),
                       ),
-                      child: Center(child: Text('Save')),
+                      child: const Center(child: Text('Save')),
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      qrGeneratorProvider.shareImage();
+                    onTap: () async {
+                      var picData = await _getQrCodeBytes();
+                      qrGeneratorProvider.shareImage(picData);
                     },
                     child: Container(
                       height: 50,
@@ -114,7 +158,7 @@ class _QrGeneratorResultState extends State<QrGeneratorResult> {
                           color: Colors.blue,
                         ),
                       ),
-                      child: Center(child: Text('Share')),
+                      child: const Center(child: Text('Share')),
                     ),
                   ),
                 ],
@@ -124,5 +168,13 @@ class _QrGeneratorResultState extends State<QrGeneratorResult> {
         ),
       ),
     );
+  }
+
+  Future<ByteData> _getQrCodeBytes() async {
+    RenderRepaintBoundary boundary =
+        globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+    final ui.Image image = await boundary.toImage(pixelRatio: 3.413);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData!;
   }
 }
