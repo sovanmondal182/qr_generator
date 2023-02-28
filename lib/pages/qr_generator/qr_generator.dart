@@ -97,8 +97,8 @@ class _QrGeneratorState extends State<QrGenerator> {
                       QrBoxShape(),
                     ],
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
+                  const SizedBox(
+                    height: 10,
                   ),
                   AddImage(),
                   SizedBox(

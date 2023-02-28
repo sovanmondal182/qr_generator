@@ -22,7 +22,7 @@ class _QrBoxShapeState extends State<QrBoxShape> {
         Provider.of<QrGeneratorProvider>(context, listen: false);
     return Row(
       children: [
-        const Text('Box Shape:'),
+        const Text('Box:'),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButton<String>(

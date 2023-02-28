@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_scanner/pages/qr_generator/qr_generator.dart';
-import 'package:qr_scanner/pages/qr_scanner.dart';
+import 'package:qr_scanner/pages/qr_scanner/qr_scanner.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,40 +20,6 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      (context),
-                      MaterialPageRoute(
-                          builder: (context) => const QrGenerator()));
-                },
-                child: Container(
-                  height: 50,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset:
-                            const Offset(1, 2), // changes position of shadow
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.blue,
-                    ),
-                  ),
-                  child: const Center(
-                    child: Text('Generate QR'),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -82,6 +48,40 @@ class HomePage extends StatelessWidget {
                   ),
                   child: const Center(
                     child: Text('Scan QR'),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      (context),
+                      MaterialPageRoute(
+                          builder: (context) => const QrGenerator()));
+                },
+                child: Container(
+                  height: 50,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset:
+                            const Offset(1, 2), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text('Generate QR'),
                   ),
                 ),
               ),

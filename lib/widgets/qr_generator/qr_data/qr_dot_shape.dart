@@ -21,7 +21,7 @@ class _QrDotShapeState extends State<QrDotShape> {
         Provider.of<QrGeneratorProvider>(context, listen: false);
     return Row(
       children: [
-        const Text('Dot Shape:'),
+        const Text('Dot:'),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: DropdownButton<String>(
